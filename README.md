@@ -73,23 +73,17 @@ The specialization analysis showed that total medals do not explain everything. 
 
 ## Project Structure
 
-Original dataset files: `data/raw/`
-
-Cleaned data and summary tables used for analysis and the dashboard: `data/processed/`
-
-Jupyter notebook containing the full analysis: `notebooks/`
-
-Saved chart images from the analysis: `outputs/charts/`
-
-Python libraries needed to run the project: `requirements.txt`
+  - `data/raw/` - Original dataset files
+  - `data/processed/` - Cleaned data and summary tables used for analysis and the dashboard
+  - `notebooks/` - Jupyter notebook containing the full analysis
+  - `outputs/charts/` - Saved chart images from the analysis
+  - `requirements.txt` - Python libraries needed to run the project
 
 ## How to Run
 
-Install the required libraries: `pip install -r requirements.txt` 
-
-Open the notebook: `notebooks/olympics_analysis.ipynb` 
-
-Then run all cells from top to bottom. 
+  1. Install the required libraries: `pip install -r requirements.txt` 
+  2. Open the notebook: `notebooks/olympics_analysis.ipynb` 
+  3. Then run all cells from top to bottom. 
 
 ## Next Steps 
   - Build the Streamlit Dashboard
