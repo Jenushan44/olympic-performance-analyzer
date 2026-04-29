@@ -15,3 +15,16 @@ st.set_page_config(
 
 st.title("Olympic Performance Analyzer")
 st.write("Olympic medal trends, country performance and sport specialization using historical athlete and medal data.")
+st.sidebar.title("Filters")
+
+st.subheader("Overview")
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Total Medal Records", olympics_df['Medal'].size,border = True)
+col2.metric("Countries", olympics_df['NOC'].unique().size, border = True)
+col3.metric("Sports", olympics_df['Sport'].unique().size, border = True )
+col4.metric("Year Range", f"{olympics_df['Year'].min()} - {olympics_df['Year'].max()}", border = True)
+
+
+st.write("Country Medal Rankings")
+st.write("Medal Trends Over Time")
+st.write("Sport Specialization")
