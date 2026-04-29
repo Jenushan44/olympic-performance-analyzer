@@ -45,5 +45,10 @@ top_sports_df = olympics_df.groupby('Sport')['Medal'].size().sort_values(ascendi
 top_sports_chart = alt.Chart(top_sports_df).mark_bar().encode(x= alt.X("Sport", sort=None, title="Sport"), y= alt.Y("Medal_Count", title="Number of Medals"))
 st.altair_chart(top_sports_chart, use_container_width=True)
 
-st.write("Medal Trends Over Time")
-st.write("Sport Specialization")
+st.subheader("Medal Trends Over Time")
+medal_trends_chart = alt.Chart(medal_trends_df).mark_line().encode(x= alt.X("Year", sort=None), y = alt.Y("Number of Medals"))
+st.altair_chart(medal_trends_chart, use_container_width=True)
+
+st.subheader("Sport Specialization")
+st.write("The specialization score shows what share of a country’s medals came from its strongest sport. Countries with less than 10 total medals were filtered out.")
+st.write(specialized_countries_df)
