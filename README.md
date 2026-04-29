@@ -18,14 +18,14 @@ This project includes:
 ## Dataset 
 
 The project uses two CSV files: 
-  - athlete_events.csv
-  - noc_regions.csv
+  - `athlete_events.csv`
+  - `noc_regions.csv`
 
 The raw data is stored in: 
-  - data/raw/
+  - `data/raw/`
 
 The processed data is stored in: 
-  - data/processed/
+  - `data/processed/`
 
 ## Data Cleaning 
 
@@ -73,21 +73,21 @@ The specialization analysis showed that total medals do not explain everything. 
 
 ## Project Structure
 
-Original dataset files: data/raw/
+Original dataset files: `data/raw/`
 
-Cleaned data and summary tables used for analysis and the dashboard: data/processed/
+Cleaned data and summary tables used for analysis and the dashboard: `data/processed/`
 
-Jupyter notebook containing the full analysis: notebooks/
+Jupyter notebook containing the full analysis: `notebooks/`
 
-Saved chart images from the analysis: outputs/charts/
+Saved chart images from the analysis: `outputs/charts/`
 
-Python libraries needed to run the project: requirements.txt
+Python libraries needed to run the project: `requirements.txt`
 
 ## How to Run
 
-Install the required libraries: pip install -r requirements.txt 
+Install the required libraries: `pip install -r requirements.txt` 
 
-Open the notebook: notebooks/olympics_analysis.ipynb 
+Open the notebook: `notebooks/olympics_analysis.ipynb` 
 
 Then run all cells from top to bottom. 
 
