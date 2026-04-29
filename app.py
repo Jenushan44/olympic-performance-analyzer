@@ -31,7 +31,6 @@ st.subheader("Country Medal Rankings")
 top_medals_chart_df = top_country_medals_df.sort_values(by="0", ascending=False).head(10)
 top_medal_points_chart_df = top_country_medal_points_df.sort_values(by="Medal_Points", ascending = False).head(10)
 
-
 st.write("Top Countries by Total Medals")
 top_medal_chart = alt.Chart(top_medals_chart_df).mark_bar().encode(x = alt.X("NOC", sort = None, title = "Country (NOC)"), y = alt.Y("0", title = "Number of Medals"))
 st.altair_chart(top_medal_chart, use_container_width= True)
@@ -39,6 +38,12 @@ st.altair_chart(top_medal_chart, use_container_width= True)
 st.write("Top Countries by Medal Points")
 top_medal_points_chart = alt.Chart(top_medal_points_chart_df).mark_bar().encode(x = alt.X("NOC", sort = None, title="Country (NOC)"), y = alt.Y("Medal_Points", title="Medal Points"))
 st.altair_chart(top_medal_points_chart, use_container_width=True)
+
+st.subheader("Top Sports by Medals")
+
+top_sports_df = olympics_df.groupby('Sport')['Medal'].size().sort_values(ascending=False).head(10).reset_index(name="Medal_Count")
+top_sports_chart = alt.Chart(top_sports_df).mark_bar().encode(x= alt.X("Sport", sort=None, title="Sport"), y= alt.Y("Medal_Count", title="Number of Medals"))
+st.altair_chart(top_sports_chart, use_container_width=True)
 
 st.write("Medal Trends Over Time")
 st.write("Sport Specialization")
