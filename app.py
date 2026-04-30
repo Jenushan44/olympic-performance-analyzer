@@ -1,9 +1,9 @@
 import streamlit as st 
 import pandas as pd 
 import altair as alt
-from vega_datasets import data
 import plotly.express as px
 from utils.country_mappings import noc_to_iso
+import numpy as np
 
 olympics_df = pd.read_csv("data/processed/olympics_cleaned.csv")
 top_country_medals_df = pd.read_csv("data/processed/top_country_medals.csv")
@@ -17,6 +17,8 @@ st.set_page_config(
   page_title = "Olympic Performance Analyzer", 
   layout = "wide",
 )
+
+st.markdown("""<style> .block-container {max-width: 1250px; margin: auto; padding-top: 2rem}; </style>""", unsafe_allow_html =True)
 
 st.title("Olympic Performance Analyzer")
 st.write("Olympic medal trends, country performance and sport specialization using historical athlete and medal data.")
@@ -41,11 +43,17 @@ map_df["Medal Points"] = map_df["Medal Points"].fillna(0)
 map_df["Map_Code"] = map_df["NOC"].replace(noc_to_iso)
 map_df = map_df.dropna(subset=["Map_Code"])
 
-map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", color = "Total Medals", hover_data=  ["Country", "NOC", "Total Medals", "Medal Points"], projection = "equirectangular", color_continuous_scale=["#2f2f2f", "#d9d9d9"])
-map_fig.update_layout(height=600, paper_bgcolor = "#0e1117", plot_bgcolor = "#0e1117", font = dict(color="white"))
-map_fig.update_geos(showland = True, landcolor = "gray", showcountries = True, countrycolor = "white", showocean= True, oceancolor = "#0e1117", bgcolor = "#0e1117")
+map_df = map_df.groupby("Map_Code", as_index=False).agg({"Country":"first", "NOC": "first", "Total Medals": "sum", "Medal Points": "sum"})
 
-st.plotly_chart(map_fig, use_container_width=True, config = {"displayModeBar": False})
+map_df["Map_Medals"] = np.log1p(map_df["Total Medals"])
+map_df["Medal Intensity"] = (map_df["Map_Medals"] / map_df["Map_Medals"].max()) * 10
+
+map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", color = "Medal Intensity", hover_data=  ["Country", "NOC", "Total Medals", "Medal Points"], projection = "equirectangular", color_continuous_scale="Blues", range_color=(0, 10))
+map_fig.update_layout(height=750, paper_bgcolor = "#0e1117", plot_bgcolor = "#0e1117", font = dict(color="white"), margin = dict(l=0, r = 0, t=0, b=0))
+map_fig.update_geos(showland = True, landcolor = "gray", showcountries = True, countrycolor = "white", showocean= True, oceancolor = "#0e1117", bgcolor = "#0e1117", showframe = True, projection_scale = 1)
+map_fig.update_coloraxes(colorbar_title = "", colorbar_tickvals = ["0", "2", "4", "6", "8","10"], colorbar_thickness=18, colorbar_len = 0.7, colorbar_y = 0.5, colorbar_ticklabelposition = "outside", colorbar_ticklabeloverflow = "allow")
+
+st.plotly_chart(map_fig, use_container_width=True, config = {"displayModeBar": False, "scrollZoom": False})
 
 st.subheader("Country Medal Rankings")
 
