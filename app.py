@@ -36,6 +36,17 @@ st.markdown(""" <style>
             section[data-testid = "stSidebar"] a:hover {background-color: #1f2937; color: white;} 
             </style>""", unsafe_allow_html= True)
 
+st.markdown("""<style> 
+            div[data-baseweb="select"]> div {
+              border-color: #7cc7ff !important;}
+
+            div[data-baseweb="select"]> div:hover {
+                border-color: #7cc7ff !important;}
+
+            div[data-baseweb="select"]> div:focus-within {
+                border-color: #7cc7ff !important;
+                box-shadow: 0 0 0 1px #7cc7ff !important;}
+            </style> """, unsafe_allow_html= True)
 
 st.subheader("Overview")
 col1, col2, col3, col4 = st.columns(4)
