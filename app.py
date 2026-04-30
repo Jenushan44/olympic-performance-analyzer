@@ -48,7 +48,8 @@ map_df = map_df.groupby("Map_Code", as_index=False).agg({"Country":"first", "NOC
 map_df["Map_Medals"] = np.log1p(map_df["Total Medals"])
 map_df["Medal Intensity"] = (map_df["Map_Medals"] / map_df["Map_Medals"].max()) * 10
 
-map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", color = "Medal Intensity", hover_data=  ["Country", "NOC", "Total Medals", "Medal Points"], projection = "equirectangular", color_continuous_scale="Blues", range_color=(0, 10))
+map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", color = "Medal Intensity", custom_data=  ["Country", "NOC", "Total Medals", "Medal Points", "Medal Intensity"], projection = "equirectangular", color_continuous_scale="Blues", range_color=(0, 10))
+map_fig.update_traces(hovertemplate = "<b>%{customdata[0]} (%{customdata[1]})</b><br>" "%{customdata[2]:,} Total Medals<br>" "%{customdata[3]:,} Medal Points<br>" "Medal Intensity: %{customdata[4]:.1f}" "<extra></extra>")
 map_fig.update_layout(height=550, paper_bgcolor = "#0e1117", plot_bgcolor = "#0e1117", font = dict(color="white"), margin = dict(l=0, r = 0, t=0, b=0))
 map_fig.update_geos(showland = True, landcolor = "gray", showcountries = True, countrycolor = "white", showocean= True, oceancolor = "#0e1117", bgcolor = "#0e1117", showframe = True, projection_scale = 1)
 map_fig.update_coloraxes(colorbar_title = "", colorbar_tickvals = ["0", "2", "4", "6", "8","10"], colorbar_thickness=18, colorbar_len = 0.7, colorbar_y = 0.5, colorbar_ticklabelposition = "outside", colorbar_ticklabeloverflow = "allow")
@@ -91,6 +92,47 @@ specialization_table_df = specialized_countries_df.copy()
 specialization_table_df["Specialization_Score"] = specialization_table_df["Specialization_Score"].round(2)
 specialization_table_df = specialization_table_df.rename(columns={"NOC": "Country (NOC)","Sport_Medal_Count": "Sport Medal Count", "Total_Country_Medals": "Total Country Medals", "Specialization_Score": "Specialization Score"})
 st.dataframe(specialization_table_df, use_container_width = True, hide_index = True)
+
+
+st.markdown("<h2 style = 'text-align: center;'>Country Explorer</h2>", unsafe_allow_html=True)
+st.markdown("<p style = 'text-align: center; font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic; '>Select a country to explore its Olympic medal profile</p>", unsafe_allow_html=True)
+noc_to_country_name = (noc_regions_df[["NOC", "region"]].drop_duplicates().set_index("NOC")["region"].to_dict())
+country_options = sorted(olympics_df["NOC"].unique(), key = lambda noc: noc_to_country_name.get(noc, noc))
+selected_noc = st.selectbox("Select a country", country_options, format_func = lambda noc: f"{noc_to_country_name.get(noc, noc)} ({noc})")
+selected_country_df = olympics_df[olympics_df["NOC"] == selected_noc]
+selected_country_name = noc_to_country_name.get(selected_noc, selected_noc)
+selected_total_medals = len(selected_country_df)
+
+selected_points_row = top_country_medal_points_df[top_country_medal_points_df["NOC"] == selected_noc]
+if not selected_points_row.empty: 
+  selected_medal_points = int(selected_points_row["Medal_Points"].iloc[0])
+else: 
+  selected_medal_points = 0
+
+
+selected_top_sport_df = (selected_country_df.groupby("Sport")["Medal"].size().sort_values(ascending=False).reset_index(name = "Medal Count"))
+
+if not selected_top_sport_df.empty: 
+  selected_top_sport = selected_top_sport_df.iloc[0]["Sport"]
+else: 
+  selected_top_sport = "N/A"
+
+country_col1, country_col2, country_col3 = st.columns(3)
+country_col1.metric("Total Medals", f"{selected_total_medals:,}", border = True)
+country_col2.metric("Medal Points", f"{selected_medal_points:,}", border = True)
+country_col3.metric("Top Sport", selected_top_sport, border = True)
+
+
+st.markdown(f"<h4 style = 'text-align: center;'>{selected_country_name}'s Top Sports</h4>", unsafe_allow_html = True)
+selected_top_sports_chart_df = selected_top_sport_df.head(10)
+selected_top_sports_chart = alt.Chart(selected_top_sports_chart_df).mark_bar().encode(x = alt.X("Medal Count", title = "Number of Medals"), y = alt.Y("Sport", sort = "-x", title = None))
+st.altair_chart(selected_top_sports_chart, use_container_width = True)
+
+selected_country_trend_df = (selected_country_df.groupby("Year")["Medal"].size().reset_index(name = "Number of Medals").sort_values("Year"))
+st.markdown(f"<h4 style = 'text-align: center;' > {selected_country_name}'s Medals Over Time</h4>", unsafe_allow_html= True)
+selected_country_trend_chart = alt.Chart(selected_country_trend_df).mark_line(point = True).encode(x = alt.X("Year",title = "Year" ), y = alt.Y("Number of Medals"))
+st.altair_chart(selected_country_trend_chart, use_container_width= True)
+
 
 st.markdown("<h2 style = 'text-align: center;'>Olympic Insights Explorer</h2>", unsafe_allow_html=True)
 st.markdown("<p style = 'text-align: center; font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic; ' >Choose a question to explore the key patterns in the Olympic data</p>", unsafe_allow_html=True)
