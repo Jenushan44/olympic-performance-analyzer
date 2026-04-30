@@ -55,18 +55,22 @@ map_fig.update_coloraxes(colorbar_title = "", colorbar_tickvals = ["0", "2", "4"
 
 st.plotly_chart(map_fig, use_container_width=True, config = {"displayModeBar": False, "scrollZoom": False})
 
-st.subheader("Country Medal Rankings")
+st.markdown("<h2 style = 'text-align: center;' >Country Medal Rankings</h2>", unsafe_allow_html=True)
 
 top_medals_chart_df = top_country_medals_df.sort_values(by="0", ascending=False).head(10)
 top_medal_points_chart_df = top_country_medal_points_df.sort_values(by="Medal_Points", ascending = False).head(10)
 
-st.write("Top Countries by Total Medals")
-top_medal_chart = alt.Chart(top_medals_chart_df).mark_bar().encode(x = alt.X("NOC", sort = None, title = "Country (NOC)"), y = alt.Y("0", title = "Number of Medals"))
-st.altair_chart(top_medal_chart, use_container_width= True)
+country_medal_rank_col1, country_medal_rank_col2 = st.columns(2)
 
-st.write("Top Countries by Medal Points")
-top_medal_points_chart = alt.Chart(top_medal_points_chart_df).mark_bar().encode(x = alt.X("NOC", sort = None, title="Country (NOC)"), y = alt.Y("Medal_Points", title="Medal Points"))
-st.altair_chart(top_medal_points_chart, use_container_width=True)
+with country_medal_rank_col1:
+  st.markdown("<h4 style = 'text-align: center;'>Top 10 Countries by Total Medals</h4>", unsafe_allow_html=True)
+  top_medal_chart = alt.Chart(top_medals_chart_df).mark_bar().encode(x = alt.X("0", title = "Number of Medals"), y = alt.Y("NOC", sort = None, title = "Country (NOC)"))
+  st.altair_chart(top_medal_chart, use_container_width= True)
+
+with country_medal_rank_col2:
+  st.markdown("<h4 style = 'text-align: center;'>Top 10 Countries by Medal Points</h4>", unsafe_allow_html=True)
+  top_medal_points_chart = alt.Chart(top_medal_points_chart_df).mark_bar().encode(x = alt.X("Medal_Points", title="Medal Points"), y = alt.Y("NOC", sort = None, title="Country (NOC)"))
+  st.altair_chart(top_medal_points_chart, use_container_width=True)
 
 st.subheader("Top Sports by Medals")
 
