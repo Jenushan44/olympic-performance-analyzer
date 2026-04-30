@@ -3,6 +3,7 @@ import pandas as pd
 import altair as alt
 from vega_datasets import data
 import plotly.express as px
+from utils.country_mappings import noc_to_iso
 
 olympics_df = pd.read_csv("data/processed/olympics_cleaned.csv")
 top_country_medals_df = pd.read_csv("data/processed/top_country_medals.csv")
@@ -10,6 +11,7 @@ top_country_medal_points_df = pd.read_csv("data/processed/top_country_medal_poin
 medal_trends_df = pd.read_csv("data/processed/medal_trends.csv")
 country_top_sport_df = pd.read_csv("data/processed/country_top_sport.csv")
 specialized_countries_df = pd.read_csv("data/processed/specialized_countries.csv")
+noc_regions_df = pd.read_csv("data/raw/noc_regions.csv")
 
 st.set_page_config(
   page_title = "Olympic Performance Analyzer", 
@@ -27,64 +29,19 @@ col2.metric("Countries", olympics_df['NOC'].unique().size, border = True)
 col3.metric("Sports", olympics_df['Sport'].unique().size, border = True )
 col4.metric("Year Range", f"{olympics_df['Year'].min()} - {olympics_df['Year'].max()}", border = True)
 
-map_df = pd.merge(top_country_medals_df, top_country_medal_points_df, on="NOC")
-map_df = map_df.rename(columns={"0": "Total Medals", "Medal_Points": "Medal Points"})
+map_df = noc_regions_df[["NOC", "region"]].drop_duplicates()
+map_df = map_df.merge(top_country_medals_df, on="NOC", how="left")
+map_df = map_df.merge(top_country_medal_points_df, on="NOC", how= "left")
 
-map_df["Map_Code"] = map_df["NOC"]
+map_df = map_df.rename(columns={"region": "Country", "0": "Total Medals", "Medal_Points": "Medal Points"})
+map_df["Total Medals"] = map_df["Total Medals"].fillna(0)
+map_df["Medal Points"] = map_df["Medal Points"].fillna(0)
 
-noc_to_iso = {
-  "GER": "DEU",
-  "SUI": "CHE",
-  "NED": "NLD",
-  "DEN": "DNK",
-  "POR": "PRT",
-  "MAS": "MYS",
-  "INA": "IDN",
-  "IRI": "IRN",
-  "KSA": "SAU",
-  "KUW": "KWT",
-  "ALG": "DZA",
-  "RSA": "ZAF",
-  "CRO": "HRV",
-  "SLO": "SVN",
-  "GRE": "GRC",
-  "BUL": "BGR",
-  "LAT": "LVA",
-  "URS": "RUS",
-  "EUN": "RUS",
-  "ROC": "RUS",
-  "GDR": "DEU",
-  "FRG": "DEU",
-  "TCH": "CZE",
-  "YUG": "SRB",
-  "SCG": "SRB",
-  "BOH": "CZE",
-  "ANZ": "AUS",
-  "CHI": "CHL",
-  "BAH": "BHS",
-  "BAR": "BRB",
-  "BER": "BMU",
-  "BOT": "BWA",
-  "BRN": "BHR",
-  "CRC": "CRI",
-  "ESA": "SLV",
-  "HAI": "HTI",
-  "LIB": "LBN",
-  "MGL": "MNG",
-  "NGR": "NGA",
-  "NIG": "NER",
-  "PUR": "PRI",
-  "SRI": "LKA",
-  "TAN": "TZA",
-  "UAE": "ARE",
-  "VIE": "VNM",
-  "ZAM": "ZMB",
-  "ZIM": "ZWE",
-}
 
-map_df["Map_Code"] = map_df["Map_Code"].replace(noc_to_iso)
+map_df["Map_Code"] = map_df["NOC"].replace(noc_to_iso)
+map_df = map_df.dropna(subset=["Map_Code"])
 
-map_fig = px.choropleth(map_df, locations = "Map_Code", color = "Total Medals", hover_data=  ["NOC", "Total Medals", "Medal Points"], projection = "equirectangular", color_continuous_scale=["#2f2f2f", "#d9d9d9"])
+map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", color = "Total Medals", hover_data=  ["Country", "NOC", "Total Medals", "Medal Points"], projection = "equirectangular", color_continuous_scale=["#2f2f2f", "#d9d9d9"])
 map_fig.update_layout(height=600, paper_bgcolor = "#0e1117", plot_bgcolor = "#0e1117", font = dict(color="white"))
 map_fig.update_geos(showland = True, landcolor = "gray", showcountries = True, countrycolor = "white", showocean= True, oceancolor = "#0e1117", bgcolor = "#0e1117")
 
