@@ -114,6 +114,15 @@ requirements.txt       Python libraries needed to run the project
 
 ## Screenshots
 
+### Overview and Medal Map
+![Overview and Medal Map](outputs/screenshots/medal-map.png)
+
+### Medal Rankings and Trends
+![Medal Rankings and Trends](outputs/screenshots/medal-rankings-trends.png)
+
+### Sport Specialization, Country Explorer and Insights Explorer
+![Sport Specialization, Country Explorer and Insights Explorer](outputs/screenshots/country-explorer.png)
+
 ## Future Improvements 
   - Separating Summer and Winter Olympics for cleaner analysis
   - Adding population data for fairer country comparisons
