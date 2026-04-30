@@ -91,3 +91,23 @@ specialization_table_df = specialized_countries_df.copy()
 specialization_table_df["Specialization_Score"] = specialization_table_df["Specialization_Score"].round(2)
 specialization_table_df = specialization_table_df.rename(columns={"NOC": "Country (NOC)","Sport_Medal_Count": "Sport Medal Count", "Total_Country_Medals": "Total Country Medals", "Specialization_Score": "Specialization Score"})
 st.dataframe(specialization_table_df, use_container_width = True, hide_index = True)
+
+st.markdown("<h2 style = 'text-align: center;'>Olympic Insights Explorer</h2>", unsafe_allow_html=True)
+st.markdown("<p style = 'text-align: center; font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic; ' >Choose a question to explore the key patterns in the Olympic data</p>", unsafe_allow_html=True)
+
+st.markdown("""<style> div[data-testid= "stExpander"] { margin-bottom: -0.5rem;}</style>""", unsafe_allow_html=True)
+with st.expander("Which country has the most total medals?"): 
+  top_country = top_country_medals_df.sort_values(by = "0", ascending=False).iloc[0]
+  st.write(f"{top_country['NOC']} has the most total medals with {int(top_country['0'])} medals.")
+
+with st.expander("Which country has the most medal points?"): 
+  top_points_country = top_country_medal_points_df.sort_values(by = "Medal_Points", ascending= False).iloc[0]
+  st.write(f"{top_points_country['NOC']} has the most medal points with {int(top_points_country['Medal_Points'])} medal points.")
+
+with st.expander("Which sport has the most medals?"): 
+  top_sport = top_sports_df.sort_values(by="Medal_Count", ascending=False).iloc[0]
+  st.write(f"{top_sport['Sport']} has the most medals with {int(top_sport['Medal_Count'])} medals.")
+
+with st.expander("Which country is most specialized in one sport?"): 
+  most_specialized = specialized_countries_df.sort_values(by= "Specialization_Score", ascending = False).iloc[0]
+  st.write(f"{most_specialized['NOC']} is the most specialized country. Its strongest sport is {most_specialized['Sport']}, with {int(most_specialized['Sport_Medal_Count'])} of its {int(most_specialized['Total_Country_Medals']):,} medals coming from that sport.")
