@@ -22,7 +22,20 @@ st.markdown("""<style> .block-container {max-width: 1250px; margin: auto; paddin
 
 st.title("Olympic Performance Analyzer")
 st.write("Olympic medal trends, country performance and sport specialization using historical athlete and medal data.")
-st.sidebar.title("Filters")
+st.sidebar.title("Navigation")
+st.sidebar.markdown("[Overview](#overview)")
+st.sidebar.markdown("[Olympic Medal Rankings](#olympic-medal-rankings)")
+st.sidebar.markdown("[Medal Trends Over Time](#medal-trends-over-time)")
+st.sidebar.markdown("[Sport Specialization Rankings](#sport-specialization-rankings)")
+st.sidebar.markdown("[Country Explorer](#country-explorer)")
+st.sidebar.markdown("[Olympic Insights Explorer](#olympic-insights-explorer)")
+
+st.markdown(""" <style> 
+            section[data-testid= "stSidebar"] { background-color: black;} 
+            section[data-testid="stSidebar"] a {color: #d1d5db; text-decoration: none; display: block; padding: 0.2rem 0.6rem; border-radius: 2px; transition: background-color 0.2s ease, color 0.2s ease;} 
+            section[data-testid = "stSidebar"] a:hover {background-color: #1f2937; color: white;} 
+            </style>""", unsafe_allow_html= True)
+
 
 st.subheader("Overview")
 col1, col2, col3, col4 = st.columns(4)
@@ -86,13 +99,13 @@ medal_trends_chart = alt.Chart(medal_trends_df).mark_line().encode(x= alt.X("Yea
 st.altair_chart(medal_trends_chart, use_container_width=True)
 
 st.markdown("<h2 style = 'text-align: center;'>Sport Specialization Rankings</h2>", unsafe_allow_html=True)
+st.markdown("<div id='sport-specialization-rankings'></div>", unsafe_allow_html=True)
 st.markdown("<p style = 'text-align: center; font-style: italic; font-size: 1rem; margin-top: -0.4rem; margin-bottom: 1.4rem;'>The specialization score shows what share of a country’s medals came from its strongest sport. Countries with less than 10 total medals were filtered out.</p>", unsafe_allow_html=True)
 
 specialization_table_df = specialized_countries_df.copy()
 specialization_table_df["Specialization_Score"] = specialization_table_df["Specialization_Score"].round(2)
 specialization_table_df = specialization_table_df.rename(columns={"NOC": "Country (NOC)","Sport_Medal_Count": "Sport Medal Count", "Total_Country_Medals": "Total Country Medals", "Specialization_Score": "Specialization Score"})
 st.dataframe(specialization_table_df, use_container_width = True, hide_index = True)
-
 
 st.markdown("<h2 style = 'text-align: center;'>Country Explorer</h2>", unsafe_allow_html=True)
 st.markdown("<p style = 'text-align: center; font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic; '>Select a country to explore its Olympic medal profile</p>", unsafe_allow_html=True)
@@ -132,7 +145,6 @@ selected_country_trend_df = (selected_country_df.groupby("Year")["Medal"].size()
 st.markdown(f"<h4 style = 'text-align: center;' > {selected_country_name}'s Medals Over Time</h4>", unsafe_allow_html= True)
 selected_country_trend_chart = alt.Chart(selected_country_trend_df).mark_line(point = True).encode(x = alt.X("Year",title = "Year" ), y = alt.Y("Number of Medals"))
 st.altair_chart(selected_country_trend_chart, use_container_width= True)
-
 
 st.markdown("<h2 style = 'text-align: center;'>Olympic Insights Explorer</h2>", unsafe_allow_html=True)
 st.markdown("<p style = 'text-align: center; font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic; ' >Choose a question to explore the key patterns in the Olympic data</p>", unsafe_allow_html=True)
