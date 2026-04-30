@@ -4,7 +4,7 @@ This project analyzes historical Olympic athlete and medal data to find patterns
 
 ## Project Overview 
 
-I used Python, pandas, NumPy and Matplotlib to clean and analyze the Olympic data. 
+I used Python, pandas, NumPy, Streamlit, Plotly and Altair to clean, analyze and visualize the Olympic data in an interactive dashboard. 
 
 This project includes: 
   - Cleaning and filtering Olympic athlete records
@@ -13,8 +13,12 @@ This project includes:
   - Creating a weighted medal points system
   - Analyzing medal trends over time
   - Measuring country sport specialization
-  - Saving processed datasets and chart outputs for future Streamlit dashboard
-
+  - Mapping Olympic NOC codes to ISO country codes for the choropleth map
+  - Building an interactive Streamlit dashboard
+  - Adding a Country Explorer for country-specific Olympic profiles
+  - Adding an Olympic Insights Explorer for guided questions
+  - Adding sidebar navigation for dashboard sections
+  
 ## Dataset 
 
 The project uses two CSV files: 
@@ -45,7 +49,20 @@ The main questions that I explored were:
   - Which countries are most specialized in one sport?
   - What is each country's strongest Olympic sport?
 
-## Custom Scorings 
+## Dashboard Features
+
+The Streamlit dashboard includes: 
+  - Overview metrics for total medal records, countries, sports and year range
+  - Interactive world choropleth map showing medal intensity by country
+  - Country medal rankings by total medals and weighted medal points
+  - Top sports by total medals
+  - Medal trends over time
+  - Sport specialization rankings
+  - Country Explorer for selecting a specific country and viewing its Olympic profile
+  - Olympic Insights Explorer with guided questions
+  - Sidebar navigation for jumping between dashboard sections
+
+## Custom Scoring
 
 ### Medal Points 
 
@@ -63,6 +80,12 @@ I created a specialization score to measure how much of a country's medal succes
 
 For example, if a country has 100 total medals and 60 came from Athletics, then its Athletics specialization score would be: 60 / 100 = 0.60. This means that 60% of that country's medals came from Athletics. In order to make the ranking more useful, I filtered out countries with less than 10 total medals. Countries with 1 or 2 medals can easily have a score of 1.0 which makes the results misleading. 
 
+### Medal Intensity 
+
+For the choropeth map, I used a log-scaled medal intensity score from 0-10. This makes the map easier to read because a few countries have much higher medal totals than most others. 
+
+The map hover still shows the real total medals and medal points. 
+
 ## Key Findings
 
 The United States had the highest total medal count and medal points in the dataset. Other countries such as the Soviet Union, Germany, Great Britain, France and Italy also ranked near the top. 
@@ -73,22 +96,29 @@ The specialization analysis showed that total medals do not explain everything. 
 
 ## Project Structure
 
-  - `data/raw/` - Original dataset files
-  - `data/processed/` - Cleaned data and summary tables used for analysis and the dashboard
-  - `notebooks/` - Jupyter notebook containing the full analysis
-  - `outputs/charts/` - Saved chart images from the analysis
-  - `requirements.txt` - Python libraries needed to run the project
+```
+data/raw/              Original dataset files
+data/processed/        Cleaned data and summary tables used by the dashboard
+notebooks/             Jupyter notebook containing the analysis workflow
+outputs/charts/        Saved chart images from earlier analysis
+utils/                 Helper files such as country code mappings
+app.py                 Streamlit dashboard application
+requirements.txt       Python libraries needed to run the project
+```
 
 ## How to Run
 
-  1. Install the required libraries: `pip install -r requirements.txt` 
-  2. Open the notebook: `notebooks/olympics_analysis.ipynb` 
-  3. Then run all cells from top to bottom. 
+  1. Install the required libraries: `pip install -r requirements.txt`
+  2. Run the streamlit dashboard: `streamlit run app.py`
+  3. To view the analysis notebooken open: `notebooks/olympics_analysis.ipynb`, then run all cells from top to bottom. 
 
-## Next Steps 
-  - Build the Streamlit Dashboard
-  - Add filters for country, sport, year range and medal type
-  - Used processed CSV files inside the dashboard
-  - Separate Summer and Winter Olympics for cleaner analysis
-  - Add population data for fair country comparisons
+## Screenshots
+
+## Future Improvements 
+  - Separating Summer and Winter Olympics for cleaner analysis
+  - Adding population data for fairer country comparisons
+  - Adding more advanced filters for year, sport, medal type and country
+  - Deploying the dashboard online
+  - Adding more detailed country-level medal breakdowns
+
 
