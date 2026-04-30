@@ -19,7 +19,6 @@ st.set_page_config(
 )
 
 st.markdown("""<style> .block-container {max-width: 1250px; margin: auto; padding-top: 2rem}; </style>""", unsafe_allow_html =True)
-
 st.title("Olympic Performance Analyzer")
 st.write("Olympic medal trends, country performance and sport specialization using historical athlete and medal data.")
 st.sidebar.title("Navigation")
@@ -76,7 +75,7 @@ map_fig = px.choropleth(map_df, locations = "Map_Code", locationmode="ISO-3", co
 map_fig.update_traces(hovertemplate = "<b>%{customdata[0]} (%{customdata[1]})</b><br>" "%{customdata[2]:,} Total Medals<br>" "%{customdata[3]:,} Medal Points<br>" "Medal Intensity: %{customdata[4]:.1f}" "<extra></extra>")
 map_fig.update_layout(height=550, paper_bgcolor = "#0e1117", plot_bgcolor = "#0e1117", font = dict(color="white"), margin = dict(l=0, r = 0, t=0, b=0))
 map_fig.update_geos(showland = True, landcolor = "gray", showcountries = True, countrycolor = "white", showocean= True, oceancolor = "#0e1117", bgcolor = "#0e1117", showframe = True, projection_scale = 1)
-map_fig.update_coloraxes(colorbar_title = "", colorbar_tickvals = ["0", "2", "4", "6", "8","10"], colorbar_thickness=18, colorbar_len = 0.7, colorbar_y = 0.5, colorbar_ticklabelposition = "outside", colorbar_ticklabeloverflow = "allow")
+map_fig.update_coloraxes(colorbar_title = "", colorbar_tickvals = [0, 2, 4, 6, 8, 10], colorbar_thickness=18, colorbar_len = 0.9, colorbar_y = 0.5, colorbar_ticklabelposition = "outside", colorbar_ticklabeloverflow = "allow")
 
 st.plotly_chart(map_fig, use_container_width=True, config = {"displayModeBar": False, "scrollZoom": False})
 
