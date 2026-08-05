@@ -5,3 +5,4 @@ matplotlib
 streamlit
 altair
 plotly
+starlette==0.35.1
