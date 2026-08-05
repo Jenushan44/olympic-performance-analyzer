@@ -1,6 +1,10 @@
 # Olympic Performance Analyzer
 
-This project analyzes historical Olympic athlete and medal data to find patterns in country's performance, medal trends and sport specialization. The goal of the project was to answer questions such as "which countries perform best overall", "which sports produce the most medals" and "which countries rely most on one specific sport".
+This project analyzes historical Olympic athlete and medal data to find patterns in country performance, medal trends and sport specialization. The goal of the project was to answer questions such as "which countries perform best overall", "which sports produce the most medals" and "which countries rely most on one specific sport".
+
+## Live Demo
+
+[View the deployed Streamlit dashboard](https://olympic-performance-analyzer.streamlit.app/)
 
 ## Project Overview 
 
@@ -82,7 +86,7 @@ For example, if a country has 100 total medals and 60 came from Athletics, then 
 
 ### Medal Intensity 
 
-For the choropeth map, I used a log-scaled medal intensity score from 0-10. This makes the map easier to read because a few countries have much higher medal totals than most others. 
+For the choropleth map, I used a log-scaled medal intensity score from 0-10. This makes the map easier to read because a few countries have much higher medal totals than most others. 
 
 The map hover still shows the real total medals and medal points. 
 
@@ -109,8 +113,8 @@ requirements.txt       Python libraries needed to run the project
 ## How to Run
 
   1. Install the required libraries: `pip install -r requirements.txt`
-  2. Run the streamlit dashboard: `streamlit run app.py`
-  3. To view the analysis notebooken open: `notebooks/olympics_analysis.ipynb`, then run all cells from top to bottom. 
+  2. Run the Streamlit dashboard: `streamlit run app.py`
+  3. To view the analysis notebooke, open: `notebooks/olympics_analysis.ipynb`, then run all cells from top to bottom. 
 
 ## Screenshots
 
@@ -127,7 +131,6 @@ requirements.txt       Python libraries needed to run the project
   - Separating Summer and Winter Olympics for cleaner analysis
   - Adding population data for fairer country comparisons
   - Adding more advanced filters for year, sport, medal type and country
-  - Deploying the dashboard online
   - Adding more detailed country-level medal breakdowns
 
 
